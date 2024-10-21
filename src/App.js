@@ -10,15 +10,16 @@ import "./lang";
 import mockServer from "./mock";
 
 const themes = {
-  dark: `${import.meta.env.PUBLIC_URL}/css/dark-theme.css`,
-  light: `${import.meta.env.PUBLIC_URL}/css/light-theme.css`,
+  dark: `${import.meta.env.PUBLIC_URL}css/dark-theme.css`,
+  light: `${import.meta.env.PUBLIC_URL}css/light-theme.css`,
 };
 
-const environment = import.meta.env.NODE_ENV;
+const environment = import.meta.env.VITE_NODE_ENV;
 
-if (environment !== "production") {
-  mockServer({ environment });
+if (environment === "development") {
+  // mockServer({ environment: 'development' });
 }
+
 
 function App() {
   return (

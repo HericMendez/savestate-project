@@ -5,66 +5,67 @@ import store from '../store';
 import { AUTH_TOKEN } from 'constants/AuthConstant';
 import { notification } from 'antd';
 
-const unauthorizedCode = [400, 401, 403]
+const unauthorizedCode = [400, 401, 403];
 
 const service = axios.create({
   baseURL: API_BASE_URL,
   timeout: 60000
-})
+});
 
 // Config
-const TOKEN_PAYLOAD_KEY = 'authorization'
+const TOKEN_PAYLOAD_KEY = 'Authorization'; // Twitch utiliza "Authorization" com "Bearer" token
 
 // API Request interceptor
 service.interceptors.request.use(config => {
-	const jwtToken = localStorage.getItem(AUTH_TOKEN) || null;
-	
-	if (jwtToken) {
-		config.headers[TOKEN_PAYLOAD_KEY] = jwtToken
-	}
+  const jwtToken = localStorage.getItem(AUTH_TOKEN) || null;
 
-  	return config
+  if (jwtToken) {
+    config.headers[TOKEN_PAYLOAD_KEY] = `Bearer ${jwtToken}`; // Adiciona o token da Twitch no cabeçalho
+  }
+
+  return config;
 }, error => {
-	// Do something with request error here
-	notification.error({
-		message: 'Error'
-	})
-	Promise.reject(error)
-})
-
-// API respone interceptor
-service.interceptors.response.use( (response) => {
-	return response.data
-}, (error) => {
-
-	let notificationParam = {
-		message: ''
-	}
-
-	// Remove token and redirect 
-	if (unauthorizedCode.includes(error.response.status)) {
-		notificationParam.message = 'Authentication Fail'
-		notificationParam.description = 'Please login again'
-		localStorage.removeItem(AUTH_TOKEN)
-
-		store.dispatch(signOutSuccess())
-	}
-
-	if (error.response.status === 404) {
-		notificationParam.message = 'Not Found'
-	}
-
-	if (error.response.status === 500) {
-		notificationParam.message = 'Internal Server Error'
-	}
-	
-	if (error.response.status === 508) {
-		notificationParam.message = 'Time Out'
-	}
-
-	notification.error(notificationParam)
-
-	return Promise.reject(error);
+  // Do something with request error here
+  notification.error({
+    message: 'Error',
+    description: 'An error occurred while making the request.'
+  });
+  return Promise.reject(error);
 });
 
-export default service
+// API response interceptor
+service.interceptors.response.use(response => {
+  return response.data;
+}, error => {
+
+  let notificationParam = {
+    message: ''
+  };
+
+  // Remove token and redirect if unauthorized
+  if (unauthorizedCode.includes(error.response.status)) {
+    notificationParam.message = 'Authentication Fail';
+    notificationParam.description = 'Please login again';
+    localStorage.removeItem(AUTH_TOKEN);
+
+    store.dispatch(signOutSuccess());
+  }
+
+  if (error.response.status === 404) {
+    notificationParam.message = 'Not Found';
+  }
+
+  if (error.response.status === 500) {
+    notificationParam.message = 'Internal Server Error';
+  }
+
+  if (error.response.status === 508) {
+    notificationParam.message = 'Time Out';
+  }
+
+  notification.error(notificationParam);
+
+  return Promise.reject(error);
+});
+
+export default service;

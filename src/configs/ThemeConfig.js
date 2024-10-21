@@ -21,22 +21,22 @@ export function rgba(hex, opacity = 1) {
 }
 
 export const baseTheme = {
-    borderRadius: '0.25rem', // NES.css uses smaller border-radius
-    colorPrimary: THEME_COLOR.BLUE,
-    colorSuccess: THEME_COLOR.CYAN,
-    colorWarning: THEME_COLOR.GOLD,
-    colorError: THEME_COLOR.VOLCANO,
-    colorInfo: THEME_COLOR.BLUE,
-    colorText: GRAY_SCALE.GRAY,
-    colorBorder: BORDER.BASE_COLOR,
-    colorBgBody: BODY_BACKGROUND,
-    controlHeight: '2.5rem', // NES.css controls are generally smaller
-    controlHeightLG: '3rem',
-    controlHeightSM: '2rem',
-    fontFamily: `'Press Start 2P', cursive, sans-serif`, // NES.css inspired font
-    fontSizeHeading2: '1.25rem',
-    fontSizeHeading4: '1rem'
-}
+  borderRadius: "0.25rem", // NES.css uses smaller border-radius
+  colorPrimary: THEME_COLOR.BLUE,
+  colorSuccess: THEME_COLOR.CYAN,
+  colorWarning: THEME_COLOR.GOLD,
+  colorError: THEME_COLOR.VOLCANO,
+  colorInfo: THEME_COLOR.BLUE,
+  colorText: GRAY_SCALE.GRAY,
+  colorBorder: BORDER.BASE_COLOR,
+  colorBgBody: BODY_BACKGROUND,
+  controlHeight: "2.5rem", // NES.css controls are generally smaller
+  controlHeightLG: "3rem",
+  controlHeightSM: "2rem",
+  fontFamily: `'Courier New',  sans-serif`, // NES.css inspired font
+  fontSizeHeading2: "1.25rem",
+  fontSizeHeading4: "1rem",
+};
 
 const getBaseComponentThemeConfig = (
     {

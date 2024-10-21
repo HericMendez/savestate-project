@@ -27,10 +27,9 @@ import {
 } from '@ant-design/icons';
 import utils from 'utils';
 import { useSelector } from 'react-redux';
+import { AUTH_TOKEN } from "constants/AuthConstant";
 
-const MembersChart = props => (
-  <ApexChart {...props}/>
-)
+const MembersChart = (props) => <ApexChart {...props} />;
 
 const memberChartOption = {
   ...apexLineChartDefaultOption,
@@ -38,15 +37,15 @@ const memberChartOption = {
     chart: {
       sparkline: {
         enabled: true,
-      }
+      },
     },
     colors: [COLOR_2],
-  }
-}
+  },
+};
 
 const latestTransactionOption = [
   {
-    key: 'Refresh',
+    key: "Refresh",
     label: (
       <Flex alignItems="center" gap={SPACER[2]}>
         <ReloadOutlined />
@@ -55,7 +54,7 @@ const latestTransactionOption = [
     ),
   },
   {
-    key: 'Print',
+    key: "Print",
     label: (
       <Flex alignItems="center" gap={SPACER[2]}>
         <PrinterOutlined />
@@ -64,7 +63,7 @@ const latestTransactionOption = [
     ),
   },
   {
-    key: 'Export',
+    key: "Export",
     label: (
       <Flex alignItems="center" gap={SPACER[2]}>
         <FileExcelOutlined />
@@ -72,11 +71,11 @@ const latestTransactionOption = [
       </Flex>
     ),
   },
-]
+];
 
 const newJoinMemberOptions = [
   {
-    key: 'Add all',
+    key: "Add all",
     label: (
       <Flex alignItems="center" gap={SPACER[2]}>
         <PlusOutlined />
@@ -85,7 +84,7 @@ const newJoinMemberOptions = [
     ),
   },
   {
-    key: 'Disable all',
+    key: "Disable all",
     label: (
       <Flex alignItems="center" gap={SPACER[2]}>
         <StopOutlined />
@@ -93,27 +92,34 @@ const newJoinMemberOptions = [
       </Flex>
     ),
   },
-]
+];
 
-const CardDropdown = ({items}) => {
-
+const CardDropdown = ({ items }) => {
   return (
-    <Dropdown menu={{items}} trigger={['click']} placement="bottomRight">
-      <a href="/#" className="text-gray font-size-lg" onClick={e => e.preventDefault()}>
+    <Dropdown menu={{ items }} trigger={["click"]} placement="bottomRight">
+      <a
+        href="/#"
+        className="text-gray font-size-lg"
+        onClick={(e) => e.preventDefault()}
+      >
         <EllipsisOutlined />
       </a>
     </Dropdown>
-  )
-}
+  );
+};
 
 const tableColumns = [
   {
-    title: 'Game',
-    dataIndex: 'name',
-    key: 'name',
+    title: "Game",
+    dataIndex: "name",
+    key: "name",
     render: (text, record) => (
       <div className="d-flex align-items-center">
-        <Avatar size={30} className="font-size-sm" style={{backgroundColor: record.avatarColor}}>
+        <Avatar
+          size={30}
+          className="font-size-sm"
+          style={{ backgroundColor: record.avatarColor }}
+        >
           {utils.getNameInitial(text)}
         </Avatar>
         <span className="ml-2">{text}</span>
@@ -123,11 +129,9 @@ const tableColumns = [
 
   {
     title: () => <div className="text-right">Horas de jogo</div>,
-    key: 'game_time',
+    key: "game_time",
     render: (_, record) => (
-      <div className="text-right">
-        {record?.game_time}
-      </div>
+      <div className="text-right">{record?.game_time}</div>
     ),
   },
 ];
@@ -136,56 +140,57 @@ export const DefaultDashboard = () => {
   const [visitorChartData] = useState(VisitorChartData);
   const [annualStatisticData] = useState(AnnualStatisticData);
   const [activeMembersData] = useState(ActiveMembersData);
-  const [newMembersData] = useState(NewMembersData)
-  const [recentTransactionData] = useState(RecentTransactionData)
-  const { direction } = useSelector(state => state.theme)
-
+  const [newMembersData] = useState(NewMembersData);
+  const [recentTransactionData] = useState(RecentTransactionData);
+  const { direction } = useSelector((state) => state.theme);
+  const check_token = localStorage.getItem(AUTH_TOKEN);
+  console.log("token da twitch recebida na Home:", check_token);
   return (
-    <>  
+    <>
       <Row gutter={16}>
-        <Col xs={24} sm={24} md={24} >
+        <Col xs={24} sm={24} md={24}>
           <Row gutter={16}>
-            {
-              annualStatisticData.map((elm, i) => (
-                <Col xs={24} sm={24} md={24} lg={24} xl={8} key={i}>
-                  <StatisticWidget 
-                    title={elm.title} 
-                    value={elm.value}
-                    status={elm.status}
-                    subtitle={elm.subtitle}
-                  />
-                </Col>
-              ))
-            }
+            {annualStatisticData.map((elm, i) => (
+              <Col xs={24} sm={24} md={24} lg={24} xl={8} key={i}>
+                <StatisticWidget
+                  title={elm.title}
+                  value={elm.value}
+                  status={elm.status}
+                  subtitle={elm.subtitle}
+                />
+              </Col>
+            ))}
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-                <ChartWidget 
-                  title="Olha só que gráfico véi KKKKKK " 
-                  series={visitorChartData.series} 
-                  xAxis={visitorChartData.categories} 
-                  height={'400px'}
-                  direction={direction}
-                />
+              <ChartWidget
+                title="Olha só que gráfico véi KKKKKK "
+                series={visitorChartData.series}
+                xAxis={visitorChartData.categories}
+                height={"400px"}
+                direction={direction}
+              />
             </Col>
           </Row>
         </Col>
-        <Col xs={24} sm={24} md={24} >
-          <Card title="Favoritos" extra={<CardDropdown items={latestTransactionOption} />}>
-            <Table 
-              className="no-border-last" 
-              columns={tableColumns} 
-              dataSource={recentTransactionData} 
-              rowKey='id' 
+        <Col xs={24} sm={24} md={24}>
+          <Card
+            title="Favoritos"
+            extra={<CardDropdown items={latestTransactionOption} />}
+          >
+            <Table
+              className="no-border-last"
+              columns={tableColumns}
+              dataSource={recentTransactionData}
+              rowKey="id"
               pagination={false}
             />
           </Card>
         </Col>
       </Row>
-
     </>
-  )
-}
+  );
+};
 
 
 export default DefaultDashboard;

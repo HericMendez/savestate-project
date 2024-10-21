@@ -35,6 +35,9 @@ const MenuItem = ({title, icon, path}) => {
 
 	const textStyle = {
 		color: currentTheme === "light" ? "#2c2c2c" : "#C8C8C8",
+		fontFamily: '"Press Start 2P", system-ui',
+		fontWeight: 400,
+		fontStyle: "normal"
 
 	  }
 
